@@ -5,11 +5,11 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
-	//private static final SessionFactory sessionFactory = buildSessionFactory();
+	private static final SessionFactory sessionFactory = buildSessionFactory();
 	private static final SessionFactory sessionFactoryAnnotation = buildSessionFactoryAnnotation();
 	
 	//os dois métodos abaixo fazem uso do mapeamento via hbm.xml
-	/*
+	
 	private static SessionFactory buildSessionFactory() {
 		try {
 			Configuration cfg = new Configuration();
@@ -25,7 +25,7 @@ public class HibernateUtil {
 		return sessionFactory;
 	}
 	
-	*/
+	
 	
 	//refiz esses métodos para não desativar o métodos acima
 	//aqui faz uso de annotations
