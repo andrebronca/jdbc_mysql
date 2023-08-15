@@ -26,5 +26,6 @@
     	<mapping resource="com/livro/capitulo3/hibernate/crudxml/Contato.hbm.xml" />
     	<!-- classe com annotations -->
     	<mapping class="com.livro.capitulo3.annotation.ContatoAnnotations" />
+    	
     </session-factory>
 </hibernate-configuration>

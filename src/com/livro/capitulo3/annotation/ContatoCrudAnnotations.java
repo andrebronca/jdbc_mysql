@@ -1,18 +1,18 @@
-package com.livro.capitulo3.hibernate.crudxml;
+package com.livro.capitulo3.annotation;
 
 import java.sql.Date;
 import java.util.List;
 
 import com.livro.capitulo3.hibernate.conexao.HibernateUtil;
+import com.livro.capitulo3.hibernate.crudxml.Contato;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class ContatoCrudXML {
-
-	public void salvar(Contato contato) {
+public class ContatoCrudAnnotations {
+	public void salvar(ContatoAnnotations contato) {
 		Session sessao = null;
 		Transaction transacao = null;
 		try {
@@ -30,8 +30,8 @@ public class ContatoCrudXML {
 			}
 		}
 	}
-
-	public void atualizar(Contato contato) {
+	
+	public void atualizar(ContatoAnnotations contato) {
 		Session sessao = null;
 		Transaction transacao = null;
 		try {
@@ -49,8 +49,8 @@ public class ContatoCrudXML {
 			}
 		}
 	}
-
-	public void excluir(Contato contato) {
+	
+	public void excluir(ContatoAnnotations contato) {
 		Session sessao = null;
 		Transaction transacao = null;
 		try {
@@ -70,16 +70,16 @@ public class ContatoCrudXML {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Contato> listar(){
+	public List<ContatoAnnotations> listar(){
 		Session sessao = null;
 		Transaction transacao = null;
 		Query consulta = null;
-		List<Contato> resultado = null;
+		List<ContatoAnnotations> resultado = null;
 		try {
 			sessao = HibernateUtil.getSessionFactoryAnnotation().openSession();
 			transacao = sessao.beginTransaction();
 			consulta = sessao.createQuery("from Contato");
-			resultado = consulta.list();
+			resultado = (List<ContatoAnnotations>) consulta.list();
 			transacao.commit();
 			//return resultado;
 		} catch (HibernateException e) {
@@ -95,8 +95,8 @@ public class ContatoCrudXML {
 		return resultado;
 	}
 	
-	public Contato buscaContato(int valor) {
-		Contato contato = null;
+	public ContatoAnnotations buscaContato(int id) {
+		ContatoAnnotations contato = null;
 		Session sessao = null;
 		Transaction transacao = null;
 		Query consulta = null;
@@ -104,8 +104,8 @@ public class ContatoCrudXML {
 			sessao = HibernateUtil.getSessionFactoryAnnotation().openSession();
 			transacao = sessao.beginTransaction();
 			consulta = sessao.createQuery("from Contato where codigo = :parametro");
-			consulta.setInteger("parametro", valor);
-			contato = (Contato) consulta.uniqueResult();
+			consulta.setInteger("parametro", id);
+			contato = (ContatoAnnotations) consulta.uniqueResult();
 			transacao.commit();
 		}catch (HibernateException e) {
 			System.err.println("Não foi possível buscar o contato. Erro: " + e.getMessage());
@@ -118,23 +118,25 @@ public class ContatoCrudXML {
 		}
 		return contato;
 	}
-
+	
 	public static void main(String[] args) {
-		ContatoCrudXML contatoCrudXML = new ContatoCrudXML();
-		String[] nomes = {"Fulano Hibernate", "Beltrano Hibernate", "Ciclano Hibernate"};
-		String[] fones = {"(47) 1122-3344", "(48) 3322-1144", "(49) 4411-3322"};
-		String[] emails = {"fulano@teste.com", "beltrano@teste.com", "ciclano@teste.com"};
-		String[] observacoes = {"Novo cliente", "Cliente em dia", "Visitar na sexta-feira"};
-		Contato contato = null;
+		ContatoCrudAnnotations cca = new ContatoCrudAnnotations();
+		ContatoAnnotations ca = null;
+		String[] nomes = {"Solano annotations", "Lunare annotations", "Venusiana annotations"};
+		String[] fones = {"(12) 3344-5566", "(13) 4455-6677", "(14) 5566-7788"};
+		String[] emails = {"solano@teste.com", "lunare@teste.com", "venusiana@teste.com"};
+		String[] observacoes = {"novo cliente", "cliente em dia", "ligar na terça-feira"};
+		
 		for(int i = 0; i < nomes.length; i++) {
-			contato = new Contato();
-			contato.setNome(nomes[i]);
-			contato.setTelefone(fones[i]);
-			contato.setEmail(emails[i]);
-			contato.setDataCadastro(new Date(System.currentTimeMillis()));
-			contato.setObservacao(observacoes[i]);
-			contatoCrudXML.salvar(contato);
+			ca = new ContatoAnnotations();
+			ca.setNome(nomes[i]);
+			ca.setTelefone(fones[i]);
+			ca.setEmail(emails[i]);
+			ca.setObservacao(observacoes[i]);
+			ca.setDataCadastro(new Date(System.currentTimeMillis()));
+			cca.salvar(ca);
 		}
-		System.out.println("Total de registros cadastrados: "+ contatoCrudXML.listar().size());
+		
+		System.out.println("Total de registros cadastrados: "+ cca.listar().size());
 	}
 }
